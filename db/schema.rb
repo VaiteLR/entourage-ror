@@ -11,22 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191204102654) do
+ActiveRecord::Schema.define(version: 20200202205616) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
-  enable_extension "pgcrypto"
   enable_extension "postgis"
 
-  create_table "active_admin_comments", id: false, force: :cascade do |t|
-    t.integer  "id",                        default: "nextval('active_admin_comments_id_seq'::regclass)", null: false
-    t.string   "namespace",     limit: 255
+  create_table "active_admin_comments", force: :cascade do |t|
+    t.string   "namespace"
     t.text     "body"
-    t.string   "resource_id",   limit: 255,                                                               null: false
-    t.string   "resource_type", limit: 255,                                                               null: false
+    t.string   "resource_id",   null: false
+    t.string   "resource_type", null: false
     t.integer  "author_id"
-    t.string   "author_type",   limit: 255
+    t.string   "author_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -34,6 +31,21 @@ ActiveRecord::Schema.define(version: 20191204102654) do
   add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
   add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
   add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
+
+  create_table "ad_cards", force: :cascade do |t|
+    t.string   "title",           null: false
+    t.string   "sub_title"
+    t.string   "cta",             null: false
+    t.string   "redirection_url", null: false
+    t.string   "targeted_area",   null: false
+    t.integer  "ranking",         null: false
+    t.string   "status",          null: false
+    t.date     "start_date"
+    t.date     "end_date"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "image"
+  end
 
   create_table "addresses", force: :cascade do |t|
     t.string   "place_name",                null: false
@@ -77,7 +89,7 @@ ActiveRecord::Schema.define(version: 20191204102654) do
   create_table "categories", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name",       limit: 255
+    t.string   "name"
   end
 
   create_table "chat_messages", force: :cascade do |t|
@@ -151,10 +163,10 @@ ActiveRecord::Schema.define(version: 20191204102654) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "street_person_name", limit: 255
+    t.string   "street_person_name"
     t.float    "latitude"
     t.float    "longitude"
-    t.string   "voice_message_url",  limit: 255
+    t.string   "voice_message_url"
     t.integer  "tour_id"
     t.string   "encrypted_message"
     t.string   "address"
@@ -268,9 +280,6 @@ ActiveRecord::Schema.define(version: 20191204102654) do
 
   add_index "entourages_users", ["user_id", "entourage_id"], name: "index_entourages_users_on_user_id_and_entourage_id", unique: true, using: :btree
 
-# Could not dump table "events" because of following StandardError
-#   Unknown type 'event_name' for column 'name'
-
   create_table "experimental_pending_request_reminders", force: :cascade do |t|
     t.integer  "user_id"
     t.datetime "created_at", null: false
@@ -332,7 +341,7 @@ ActiveRecord::Schema.define(version: 20191204102654) do
   add_index "moderator_reads", ["user_id", "moderatable_id", "moderatable_type"], name: "index_moderator_reads_on_user_id_and_moderatable", using: :btree
 
   create_table "newsletter_subscriptions", force: :cascade do |t|
-    t.string   "email",      limit: 255
+    t.string   "email"
     t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -369,19 +378,19 @@ ActiveRecord::Schema.define(version: 20191204102654) do
   end
 
   create_table "pois", force: :cascade do |t|
-    t.string   "name",        limit: 255
+    t.string   "name"
     t.text     "description"
     t.float    "latitude"
     t.float    "longitude"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "adress",      limit: 255
-    t.string   "phone",       limit: 255
-    t.string   "website",     limit: 255
-    t.string   "email",       limit: 255
-    t.string   "audience",    limit: 255
+    t.string   "adress"
+    t.string   "phone"
+    t.string   "website"
+    t.string   "email"
+    t.string   "audience"
     t.integer  "category_id"
-    t.boolean  "validated",               default: false, null: false
+    t.boolean  "validated",   default: false, null: false
   end
 
   add_index "pois", ["category_id", "latitude", "longitude"], name: "index_pois_on_category_id_and_latitude_and_longitude", where: "validated", using: :btree
@@ -512,9 +521,6 @@ ActiveRecord::Schema.define(version: 20191204102654) do
   add_index "simplified_tour_points", ["latitude", "longitude", "tour_id"], name: "index_simplified_tour_points_on_coordinates_and_tour_id", using: :btree
   add_index "simplified_tour_points", ["tour_id"], name: "index_simplified_tour_points_on_tour_id", using: :btree
 
-# Could not dump table "sms_deliveries" because of following StandardError
-#   Unknown type 'sms_delivery_status' for column 'status'
-
   create_table "store_daily_reports", force: :cascade do |t|
     t.string   "store_id"
     t.string   "app_name"
@@ -628,11 +634,11 @@ ActiveRecord::Schema.define(version: 20191204102654) do
   create_table "users", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email",                        limit: 255
-    t.string   "first_name",                   limit: 255
-    t.string   "last_name",                    limit: 255
+    t.string   "email"
+    t.string   "first_name"
+    t.string   "last_name"
     t.string   "phone",                                                          null: false
-    t.string   "token",                        limit: 255
+    t.string   "token"
     t.string   "device_id"
     t.integer  "device_type"
     t.string   "sms_code"

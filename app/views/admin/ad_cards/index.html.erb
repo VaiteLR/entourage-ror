@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-offset-2 col-xs-8">
+
+
+      <div class="h1" style="display: flex; align-items: center;">
+        <div style="flex-grow: 1">Cartes annonces</div>
+        <%= link_to "Créer une carte annonce", new_admin_ad_card_path,
+              class: "btn btn-success" %>
+      </div>
+
+      <table class="table">
+      <tr>
+            <td><b>Titre</b></td>
+            <td><b>Ciblage géographique</b></td>
+            <td><b>Date de création</b></td>
+            <td><b>Rang</b></td>
+            <td><b>Statut</b></td>
+            <td><b>Actions</b></td>
+          </tr>
+        <% @ad_cards.each do |ad_card| %>
+          <tr>
+            <td>
+              <%= link_to ad_card.title, [:admin, ad_card] %>
+            </td>
+            <td>
+              <%= ad_card.targeted_area %>
+            </td>
+            <td>
+              <%= ad_card.created_at %>
+            </td>
+            <td>
+              <%= ad_card.ranking %>
+            </td>
+            <td>
+              <%= ad_card.status %>
+            </td>
+            <td>
+              <%= link_to "Modifier", [:admin, ad_card],
+              class: "btn btn-success" %>
+            <% if ad_card.status != 'archived' %>
+                <%= button_to "Archiver",
+              archive_admin_ad_card_path(ad_card.id),
+              method: :post,
+              class: "btn btn-default btn-sm",
+              form: {style: "display: inline-block"} %>
+            <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+</div>

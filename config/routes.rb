@@ -37,6 +37,14 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :ad_cards, except: [:create, :update] do
+        collection { post '/new', action: :create, as: nil }
+        member do
+          post 'archive'
+          match '/edit', via: [:patch, :put], action: :update, as: nil
+        end
+      end
+
       resources :uploads, only: :new
       namespace :uploads do
         get '/success', to: :update

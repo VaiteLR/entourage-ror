@@ -1,0 +1,39 @@
+<%= render partial: 'common/errors', locals: {obj: @ad_card} %>
+<%= form_for @ad_card, url: "" do |f| %>
+  <div class="form-group">
+    <%= f.label :title, "Titre" %>
+    <div class="text-muted">max 80 caractères</div>
+    <%= f.text_field :title, required: true, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :sub_title, "Sous titre" %>
+    <div class="text-muted">max 140 caractères</div>
+    <%= f.text_field :sub_title, required: false, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :redirection_url, "Lien" %>
+    <div class="text-muted">destination du clic sur la carte - voir http://bit.ly/deeplinksEntourage</div>
+    <%= f.url_field :redirection_url, required: true, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :cta, "CTA" %>
+    <div class="text-muted">max 20 caractères</div>
+    <%= f.text_field :cta, required: true, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :targeted_area, "Ciblage géographique" %>
+    <%= f.select :targeted_area, AdCard::AD_CARD_AREAS, include_blank: false %>
+  </div>
+  <div class="form-group">
+    <%= f.label :ranking, "Rang" %>
+    <div class="text-muted">Les cartes sont espacées de +5 dans le Feed à chaque fois et commencent à 2. Donc indiquer 1 pour le rang en position 2 réelle, 2 pour le rang 7 réel, etc.</div>
+    <%= f.select :ranking, @available_rankings, include_blank: false %>
+  </div>
+  <div class="form-group">
+    <%= f.label :image, "Image" %>
+    <input type="file" class="btn btn-default"
+            name="image" accept="<%=@form.content_types%>"/>
+  </div>
+  <%= f.submit @ad_card.new_record? ? "Créer" : "Modifier",
+        class: "btn btn-success" %>
+<% end %>
